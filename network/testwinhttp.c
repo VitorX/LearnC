@@ -3,90 +3,98 @@
 #include <windows.h>
 #include <winhttp.h>
 
-int main(int argc, char** argv){
-DWORD dwSize = 0;
+int wmain(int argc, wchar_t **argv)
+{
+  DWORD dwSize = 0;
   DWORD dwDownloaded = 0;
   LPSTR pszOutBuffer;
-  BOOL  bResults = FALSE;
-  HINTERNET  hSession = NULL, 
-             hConnect = NULL,
-             hRequest = NULL;
+  BOOL bResults = FALSE;
+  HINTERNET hSession = NULL,
+            hConnect = NULL,
+            hRequest = NULL;
+
+  if (argc != 2)
+  {
+    printf("wrong usage!\n\tcommand {host}\n");
+    return 1;
+  }
 
   // Use WinHttpOpen to obtain a session handle.
-  hSession = WinHttpOpen( L"WinHTTP Example/1.0",  
-                          //WINHTTP_ACCESS_TYPE_DEFAULT_PROXY,
-                          WINHTTP_ACCESS_TYPE_AUTOMATIC_PROXY,
-                          WINHTTP_NO_PROXY_NAME, 
-                          WINHTTP_NO_PROXY_BYPASS, 0 );
+  hSession = WinHttpOpen(L"WinHTTP Example/1.0",
+                         // WINHTTP_ACCESS_TYPE_DEFAULT_PROXY,
+                         WINHTTP_ACCESS_TYPE_AUTOMATIC_PROXY,
+                         WINHTTP_NO_PROXY_NAME,
+                         WINHTTP_NO_PROXY_BYPASS, 0);
 
   // Specify an HTTP server.
-  if( hSession )
-    hConnect = WinHttpConnect( hSession, L"www.microsoft.com",
-                               INTERNET_DEFAULT_HTTPS_PORT, 0 );
+  if (hSession)
+    hConnect = WinHttpConnect(hSession, argv[1],
+                              INTERNET_DEFAULT_HTTPS_PORT, 0);
 
   // Create an HTTP request handle.
-  if( hConnect )
-    hRequest = WinHttpOpenRequest( hConnect, L"GET", NULL,
-                                   NULL, WINHTTP_NO_REFERER, 
-                                   WINHTTP_DEFAULT_ACCEPT_TYPES, 
-                                   WINHTTP_FLAG_SECURE );
+  if (hConnect)
+    hRequest = WinHttpOpenRequest(hConnect, L"GET", NULL,
+                                  NULL, WINHTTP_NO_REFERER,
+                                  WINHTTP_DEFAULT_ACCEPT_TYPES,
+                                  WINHTTP_FLAG_SECURE);
 
   // Send a request.
-  if( hRequest )
-    bResults = WinHttpSendRequest( hRequest,
-                                   WINHTTP_NO_ADDITIONAL_HEADERS, 0,
-                                   WINHTTP_NO_REQUEST_DATA, 0, 
-                                   0, 0 );
-
+  if (hRequest)
+    bResults = WinHttpSendRequest(hRequest,
+                                  WINHTTP_NO_ADDITIONAL_HEADERS, 0,
+                                  WINHTTP_NO_REQUEST_DATA, 0,
+                                  0, 0);
 
   // End the request.
-  if( bResults )
-    bResults = WinHttpReceiveResponse( hRequest, NULL );
+  if (bResults)
+    bResults = WinHttpReceiveResponse(hRequest, NULL);
 
   // Keep checking for data until there is nothing left.
-  if( bResults )
+  if (bResults)
   {
-    do 
+    do
     {
       // Check for available data.
       dwSize = 0;
-      if( !WinHttpQueryDataAvailable( hRequest, &dwSize ) )
-        printf( "Error %u in WinHttpQueryDataAvailable.\n",
-                GetLastError( ) );
+      if (!WinHttpQueryDataAvailable(hRequest, &dwSize))
+        printf("Error %u in WinHttpQueryDataAvailable.\n",
+               GetLastError());
 
       // Allocate space for the buffer.
-      pszOutBuffer = new char[dwSize+1];
-      if( !pszOutBuffer )
+      pszOutBuffer = new char[dwSize + 1];
+      if (!pszOutBuffer)
       {
-        printf( "Out of memory\n" );
-        dwSize=0;
+        printf("Out of memory\n");
+        dwSize = 0;
       }
       else
       {
         // Read the data.
-        ZeroMemory( pszOutBuffer, dwSize+1 );
+        ZeroMemory(pszOutBuffer, dwSize + 1);
 
-        if( !WinHttpReadData( hRequest, (LPVOID)pszOutBuffer, 
-                              dwSize, &dwDownloaded ) )
-          printf( "Error %u in WinHttpReadData.\n", GetLastError( ) );
+        if (!WinHttpReadData(hRequest, (LPVOID)pszOutBuffer,
+                             dwSize, &dwDownloaded))
+          printf("Error %u in WinHttpReadData.\n", GetLastError());
         else
-          printf( "%s", pszOutBuffer );
+          printf("%s", pszOutBuffer);
 
         // Free the memory allocated to the buffer.
-        delete [] pszOutBuffer;
+        delete[] pszOutBuffer;
       }
-    } while( dwSize > 0 );
+    } while (dwSize > 0);
   }
 
-
   // Report any errors.
-  if( !bResults )
-    printf( "Error %d has occurred.\n", GetLastError( ) );
+  if (!bResults)
+    printf("Error %d has occurred.\n", GetLastError());
 
   // Close any open handles.
-  if( hRequest ) WinHttpCloseHandle( hRequest );
-  if( hConnect ) WinHttpCloseHandle( hConnect );
-  if( hSession ) WinHttpCloseHandle( hSession );
+  if (hRequest)
+    WinHttpCloseHandle(hRequest);
+  if (hConnect)
+    WinHttpCloseHandle(hConnect);
+  if (hSession)
+    WinHttpCloseHandle(hSession);
 
-
+  return 0;
 }
