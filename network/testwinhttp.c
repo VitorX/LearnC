@@ -15,7 +15,7 @@ int wmain(int argc, wchar_t **argv)
 
   if (argc != 2)
   {
-    printf("wrong usage!\n\tcommand {host}\n");
+    printf("wrong usage!\n\ttestwinhttp.exe {host}\n");
     return 1;
   }
 

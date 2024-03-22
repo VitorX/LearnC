@@ -1,10 +1,10 @@
-default: testwinet testwinhttp
+default: testwininet testwinhttp
 
-testwinet: testwinet.c
+testwininet: testwininet.c
 	g++ $^ -o $@ -lwininet -DUNICODE -municode
 
 testwinhttp: testwinhttp.c
 	g++ $^ -o $@ -lwinhttp -municode
 
 clean:
-	rm -f testwinhttp.exe testwinet.exe 
+	rm -f testwinhttp.exe testwininet.exe 
