@@ -19,7 +19,7 @@ struct listNode *getIntersectionNode(struct listNode *headA, struct listNode *he
     struct listNode *pHeadA = headA;
     struct listNode *pHeadB = headB;
 
-    while ((pHeadA != pHeadB) && (pHeadA->next != NULL && pHeadB->next != NULL))
+    while ((pHeadA != pHeadB) && !(pHeadA->next == NULL && pHeadB->next == NULL))
     {
         if (pHeadA->next)
             pHeadA = pHeadA->next;
