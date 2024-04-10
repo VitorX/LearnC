@@ -1,5 +1,6 @@
 #include <Windows.h>
 #include <Wincrypt.h>
+#include <stdio.h>
 
 #define DATAFILE "mydata"
 
@@ -21,6 +22,7 @@ int main(int argc, char **argv)
 	else
 		printf("protect error:%d\n",GetLastError());
 	showdata(&outdata);
+	writedata(&outdata);
 	printf("data is unprotected like below:\n");
 	if(!CryptUnprotectData(&outdata,NULL,NULL,NULL,NULL,CRYPTPROTECT_VERIFY_PROTECTION,&decrydata))
 	{
@@ -30,6 +32,11 @@ int main(int argc, char **argv)
 }
 static void writedata(DATA_BLOB *pdata)
 {
+	FILE *pfile= fopen(DATAFILE,"w+");
+	if(pfile!=NULL)
+		fwrite(pdata->pbData,1,pdata->cbData,pfile);
+	else
+		printf("open file error:%d\n",GetLastError());
 }
 static void showdata(DATA_BLOB *pdata)
 {
