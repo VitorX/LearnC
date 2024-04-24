@@ -54,7 +54,8 @@ bool isPalindrome(struct ListNode* head) {
 int main(int argc,char **argv)
 {
 	int arr[4]={1,2,2,1};
-	struct ListNode *plist=createlist(&arr[0],4);	
+ 	struct ListNode *plist; 
+    createlist(&arr[0],4,plist);	
 	printlist(plist);
 	printf("the link list is palindrom:%s\n",isPalindrome(plist)?"true":"false");
 }
