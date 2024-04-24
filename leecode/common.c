@@ -32,21 +32,15 @@ void initlist()
     list1[i-1<0?0:i-1].next=NULL;
 }
 
-int createlist(int *arr, int size,struct ListNode *head)
+struct ListNode * createlist(int *arr,int size)
 {
-
-   if((head=malloc(sizeof(struct ListNode)*size))==NULL)
-           return 0;
-    int i;
-    for(i=0;i<size;i++)
-    {
-        (head+i)->val=i;
-        if(i<size-1)
-        (head+i)->next=head+i+1;
-        else
-        (head+i)->next=NULL;
-
-    }
-    (head+i)->next=NULL;
-  return 1; 
+	struct ListNode *plist;
+	plist=malloc(sizeof(struct ListNode)*size);
+	for(int i=0;i<size;i++)
+	{
+		if(i<size-1)
+			(plist+i)->next=plist+i+1;
+		(plist+i)->val=arr[i];
+	}
+	return plist;
 }

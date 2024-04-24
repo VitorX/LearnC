@@ -1,3 +1,6 @@
+datapro: datapro.c
+	cl $^ crypt32.lib
+
 testwmain: testwmain.c
 	cl $^ 
 

@@ -15,7 +15,6 @@ void printlist(struct ListNode *head);
 
 void initlist();
 
-int createlist(int *arr, int size,struct ListNode *head);
-
+struct ListNode * createlist(int *arr,int size);	
 extern struct ListNode list1[5];
 #endif
