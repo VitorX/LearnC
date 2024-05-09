@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+int i=10;
+
 int main(int argc, char** argv)
 {
 	char a='A';
