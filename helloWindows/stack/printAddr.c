@@ -1,4 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
+
+int testFun(int a)
+{
+	return ++a;
+}
 
 void main(int argc, char **argv)
 {
@@ -19,4 +25,6 @@ void main(int argc, char **argv)
 	printf("%p------>%c\r\n",c2,*c2);
 	printf("%p------>%d\r\n",i1,*i1);
 	printf("%p------>%d\r\n",i2,*i2);
+
+	printf("%p------>address of testFun\r\n",&testFun);
 }
